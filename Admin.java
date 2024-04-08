@@ -1,40 +1,52 @@
 
-
 import java.util.HashSet;
 import java.util.Scanner;
 
 public class Admin {
-    
+
     private static final Admin admin = new Admin();
-    private static HashSet<String> company = new HashSet<>();
     static Scanner sc = new Scanner(System.in);
     private static String name = "admin";
     private static int pin = 1234;
 
-
     public static void companies() {
-        System.out.println();
-        if(Inventory.products.isEmpty())
+
+        if (Inventory.products.isEmpty())
             System.out.println("There are no companies yet!");
-        else{
+        else {
+            System.out.println("---------------");
             int i = 1;
-            for(Product product: Inventory.products) {
-                if(company.add(product.seller))
-                System.out.println(i++ + "." + product.seller);
+            HashSet<String> company = new HashSet<>();
+            for (Product product : Inventory.products) {
+                if (company.add(product.seller))
+                    System.out.println(i++ + "." + product.seller);
+            }
+        }
+    }
+
+    public void soldproducts() {
+        if (Inventory.products.isEmpty())
+            System.out.println("There are no companies yet!");
+        else {
+            System.out.println("---------------");
+            int i = 1;
+            HashSet<String> company = new HashSet<>();
+            for (Product product : Inventory.soldproducts) {
+                product.displaySold();
             }
         }
     }
 
     public static void customers() {
-        if(Amazon.customers.isEmpty())
+        if (Amazon.customers.isEmpty())
             System.out.println("There are no customers yet!");
-        else{
-        int i = 1;
-        System.out.println();
-        for(Customer customer: Amazon.customers) {
-            System.out.println(i++ + "" + customer.name);
+        else {
+            int i = 1;
+            System.out.println();
+            for (Customer customer : Amazon.customers) {
+                System.out.println(i++ + "" + customer.name);
+            }
         }
-    }
     }
 
     public static void products() {
@@ -50,17 +62,16 @@ public class Admin {
             System.out.println("No Requests");
             return;
         }
-        int re =0,ap=0,tot=0;
+        int re = 0, ap = 0, tot = 0;
         System.out.println("\tProducts List");
-        for(Product p: Inventory.listproducts) {
+        for (Product p : Inventory.listproducts) {
             p.displayAdmin();
-            System.out.println("1.Approve\t2.Delete");
+            System.out.println("\n1.Approve\t2.Delete");
             int in = sc.nextInt();
-            if(in == 1) {
-                Inventory.addProduct(p.seller);
-                ap++; 
-            }
-            else {
+            if (in == 1) {
+                Inventory.addProduct_admin(p);
+                ap++;
+            } else {
                 System.out.println("Rejected Succesfully!");
                 re++;
             }
@@ -69,9 +80,8 @@ public class Admin {
         System.out.println("Total Items:" + tot);
         System.out.println("   Accpeted:" + ap);
         System.out.println("   Rejected:" + re);
-
+        Inventory.listproducts.clear();
     }
-
 
     public static Admin getObject() {
         return admin;
@@ -79,14 +89,13 @@ public class Admin {
 
     public boolean adminLogin() {
         System.out.println("User name:");
-        String iname = sc.next();
-        System.out.println(" Password:");
+        String iname = sc.nextLine();
+        System.out.println("Password:");
         int ipin = sc.nextInt();
-        if(name.equals(iname) && ipin ==pin) {
+        if (name.equals(iname) && ipin == pin) {
             adminMenu();
             return true;
-        }
-        else {
+        } else {
             System.out.println("Invalid Usernme/Password!");
             return false;
         }
@@ -120,7 +129,6 @@ public class Admin {
                 default:
                     System.out.println("Invalid Choice!");
             }
-        }while(inp!=5);
+        } while (inp != 5);
     }
 }
-
